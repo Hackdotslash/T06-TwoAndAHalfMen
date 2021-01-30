@@ -15,29 +15,31 @@
         You can use this portal to check if you have any health issues by telling us what symptoms you are facing. We can connect you to a nearby doctor if needed. You can also know about upcoming health conferences and read blogs here to increase self-awareness. We also provide offline facilites by using SMS. 
     </p>
 
-    <form class="mt-5 text-center">
+    <form class="mt-5 text-center" method="GET" action="https://72ab462edcc3.ngrok.io/diagnosis">
         <div class="form-group mx-auto">
             <label for="symptoms">Which of the following symptoms do you have?</label>
             <br class="mt-2" />
             <select class="selectpicker" multiple data-live-search="true" name="symptoms">
-                <option>Mustard</option>
-                <option>Ketchup</option>
-                <option>Relish</option>
+                <option>Cheek Swelling</option>
+                <option>Chest Pain</option>
+                <option>Dry Eyes</option>
                 <option>Mayo</option>
             </select>
         </div>
+        <div class="form-group mx-auto">
+            <label for="age">Age:</label>
+            <input type="text" name="age" />
+        </div>
+        <div class="form-group mx-auto">
+            <label for="gender">Gender:</label>
+            <select name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-dark">Diagnose</button>
     </form>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-sm-3">
-                <a class="btn btn-primary" href="#" role="button">Check out our offline facilites</a>
-            </div>
-            <div class="col-sm-3">
-                <a class="btn btn-primary" href="/doctor" role="button">Are you a doctor?</a>
-            </div>
-        </div>
-      </div></footer>
+{% include 'patient_footer.html' %}
 {% endblock %}

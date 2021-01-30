@@ -13,7 +13,7 @@ port = 5000
 
 @app.route('/', methods=['GET'])
 def root():
-    return jsonify({'message': 'Backend API works!'})
+    return render_template('index.html')
 
 
 if __name__ == '__main__':

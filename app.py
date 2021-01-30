@@ -42,7 +42,7 @@ def diagnosis():
         'language': 'en-gb',
         'symptoms': symptom_ids,
         'gender': args['gender'][0],
-        'year_of_birth': args['year_of_birth'][0],
+        'year_of_birth': 2021 - int(args['age'][0]),
         'format': 'json'
     }
     res = requests.get(url, data)

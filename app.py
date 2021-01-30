@@ -20,7 +20,7 @@ with open('symptoms.json') as f:
 
 @app.route('/', methods=['GET'])
 def root():
-    return jsonify({'message': 'Backend API works!'})
+    return render_template('index.html')
 
 @app.route('/diagnosis', methods=['GET'])
 def diagnosis():

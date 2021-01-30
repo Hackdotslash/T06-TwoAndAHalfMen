@@ -1,10 +1,45 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>This works?????</title>
-    </head>
-    <body>
-        This works!
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center mt-3">Welcome to Rural Health Development Portal</h1>
+
+    <p class="mt-5">
+        You can use this portal to check if you have any health issues by telling us what symptoms you are facing. We can connect you to a nearby doctor if needed. You can also know about upcoming health conferences and read blogs here to increase self-awareness. We also provide offline facilites by using SMS. 
+    </p>
+
+    <form class="mt-5 text-center" method="GET" action="https://72ab462edcc3.ngrok.io/diagnosis">
+        <div class="form-group mx-auto">
+            <label for="symptoms">Which of the following symptoms do you have?</label>
+            <br class="mt-2" />
+            <select class="selectpicker" multiple data-live-search="true" name="symptoms">
+                <option>Cheek Swelling</option>
+                <option>Chest Pain</option>
+                <option>Dry Eyes</option>
+                <option>Mayo</option>
+            </select>
+        </div>
+        <div class="form-group mx-auto">
+            <label for="age">Age:</label>
+            <input type="text" name="age" />
+        </div>
+        <div class="form-group mx-auto">
+            <label for="gender">Gender:</label>
+            <select name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-dark">Diagnose</button>
+    </form>
+</div>
+
+{% include 'patient_footer.html' %}
+{% endblock %}

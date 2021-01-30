@@ -5,17 +5,46 @@ import requests
 import hmac
 import base64
 import json
+import sqlite3
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=True)
+# con = sqlite3.connect('newdb.db')
 app.config.from_object(settings)
 port = 5000
 
 with open('symptoms.json') as f:
     symptoms = json.load(f)
+
+@app.route('/nearby', methods=['GET', 'POST'])
+def nearby():
+    if request.method == 'GET':
+        return render_template('nearby.html')
+    # dummy = [(19.116884428986182, 72.93164483021962), (19.10123794041552, 72.91207824204169)]
+    # print('request data',request.json)
+    con = sqlite3.connect('newdb.db')
+    def execute(query):
+        with con:
+            data = con.execute(query)
+        return data
+    # query_res = execute('select latitude,longitude from doctor;')
+    # for lat, lon in list(query_res):
+        # tempstri += '|{},{}'.format(lat, lon)
+    user_lat, user_lon = [request.json[i] for i in ['latitude', 'longitude']]
+    api_key = app.config['MAPS_API_KEY']
+    url = 'https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=600x300&center={},{}&zoom=13&size=600x300&maptype=roadmap&markers=color:red|label:D'.format(user_lat, user_lon, api_key)
+    # print('db query_res:',list(query_res), tempstri)
+    for lat, lon in execute('select latitude,longitude from doctor;'): # list(query_res):
+        print('inside loop',lat, lon)
+        url += '|{},{}'.format(lat,lon)
+    url += '&markers=color:blue|label:I|{},{}'.format(user_lat, user_lon)
+    url += '&key={}'.format(api_key)
+    print(url)
+    res = requests.get(url)
+    return base64.b64encode(res.content).decode()
 
 
 @app.route('/', methods=['GET'])

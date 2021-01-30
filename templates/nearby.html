@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} Nearby doctors {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<button type="submit" class="btn btn-dark" id="locateBtn">Locate!</button>
+
+<div id="map"></div>
+
+<!-- <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_GTGGge8SF-TlI8A15JsVescUBu1jexw&libraries=places"
+        async defer></script>
+-->
+<script src="{{ url_for('static', filename='js/index.js') }}" async defer></script>
+
+
+{% include 'patient_footer.html' %}
+{% endblock %}

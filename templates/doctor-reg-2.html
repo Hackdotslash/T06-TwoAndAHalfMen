@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="text-center container">
+    <h1 class="mt-3">Select the location of your clinic below</h1>
+
+    <div id="map" style="width: 500px; height: 400px;"></div>
+
+    <form name="docRegLocation" class="d-none" method="POST" action="/docRegLocation">
+        <input type="text" name="id" value="{{docID}}" />
+        <input type="text" name="lat" id="latInput" />
+        <input type="text" name="lng" id="lngInput" />
+    </form>
+
+    <button type="button" class="btn btn-dark" onclick="submitLocation()">Submit</button>
+</div>
+
+<script src="{{ url_for('static',filename='js/select-loc.js') }}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_GTGGge8SF-TlI8A15JsVescUBu1jexw&callback=initMap"
+  type="text/javascript"></script>
+
+{% endblock %}

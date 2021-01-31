@@ -9,6 +9,11 @@
 }
 
 #locateBtn {
-    margin-left: 50px;
-    margin-top: 50px;
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+.form-group em {
+  float: right;
+  color: #00aaff;
 }

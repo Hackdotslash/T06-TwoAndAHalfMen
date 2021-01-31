@@ -21,7 +21,8 @@ window.onload = () => {
                     body: JSON.stringify(payload)
                 })
                 res = await res.text()
-                map.innerHTML = `<img src="data:image/png;base64,${res}"/>`
+                // map.innerHTML = `<img src="data:image/png;base64,${res}"/>`
+                document.getElementsByTagName('html')[0].innerHTML = res
                 console.log('done')
             })
         })
@@ -33,7 +34,7 @@ function validateDocRegForm() {
     console.log(form)
     console.log(form["council"].value)
     console.log(form["reg_no"].value)
-    
+
     // use service to decide whether the doctor is valid or not
     const isValid = true
 

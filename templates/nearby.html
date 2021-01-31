@@ -10,7 +10,42 @@
 
 <button type="submit" class="btn btn-dark" id="locateBtn">Locate!</button>
 
-<div id="map"></div>
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+
+{% if res %}
+    <div id="map">
+
+        <img src="data:image/png;base64,{{ res }}"/>
+        <table class="tg">
+            <thead>
+                <tr>
+                    <th class="tg-0lax">Name</th>
+                    <th class="tg-0lax">Email</th>
+                    <th class="tg-0lax">Phone number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in doctors %}
+                <tr>
+                    <td class="tg-0lax">{{ doc[0] }}</td>
+                    <td class="tg-0lax">{{ doc[2] }}</td>
+                    <td class="tg-0lax">{{ doc[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div id="map"></div>
+{% endif %}
 
 <!-- <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_GTGGge8SF-TlI8A15JsVescUBu1jexw&libraries=places"

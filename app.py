@@ -24,7 +24,7 @@ with open('symptoms.json') as f:
 @app.route('/nearby', methods=['GET', 'POST'])
 def nearby():
     if request.method == 'GET':
-        return render_template('nearby.html')
+        return render_template('nearby.html', res=None)
     # dummy = [(19.116884428986182, 72.93164483021962), (19.10123794041552, 72.91207824204169)]
     # print('request data',request.json)
     con = sqlite3.connect('newdb.db')
@@ -38,15 +38,18 @@ def nearby():
     user_lat, user_lon = [request.json[i] for i in ['latitude', 'longitude']]
     api_key = app.config['MAPS_API_KEY']
     url = 'https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=600x300&center={},{}&zoom=13&size=600x300&maptype=roadmap&markers=color:red|label:D'.format(user_lat, user_lon, api_key)
-    # print('db query_res:',list(query_res), tempstri)
-    for lat, lon in execute('select latitude,longitude from doctor;'): # list(query_res):
-        print('inside loop',lat, lon)
+    docs = []
+    for doc in execute('select * from doctor;'): # list(query_res):
+        print('inside loop',doc)
+        lat, lon = doc[5], doc[6]
+        docs.append(doc)
         url += '|{},{}'.format(lat,lon)
     url += '&markers=color:blue|label:I|{},{}'.format(user_lat, user_lon)
     url += '&key={}'.format(api_key)
     print(url)
     res = requests.get(url)
-    return base64.b64encode(res.content).decode()
+    print(docs)
+    return render_template('nearby.html', res = base64.b64encode(res.content).decode(), doctors = docs)
 
 
 @app.route('/', methods=['GET'])

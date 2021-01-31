@@ -197,8 +197,9 @@ def view_blog(id):
         data = con.execute(query)
     for row in data:
         blog = tuple(row)
+    print(blog)
     # get doc name from doc table using docID recvd from blog table
-    doc_name = "dr. GB"
+    doc_name = get_doc_name(blog[2])
     title = blog[1]
     content = blog[4]
     return render_template('view-blog.html', title = title, content = content, author = doc_name)
@@ -219,7 +220,7 @@ def submit_blog():
     with con:
         data = con.execute(query)
     query = f"""
-    SELECT * FROM blogpost ORDER BY ID DESC LIMIT 1
+    SELECT * FROM blogpost ORDER BY blog_id DESC LIMIT 1
     """
     print(query)
     with con:
@@ -228,6 +229,28 @@ def submit_blog():
     for row in data:
         blogID = row[0]    # get ID
     return redirect(url_for('view_blog', id=blogID))
+
+@app.route('/new-conference', methods=['GET'])
+def new_conference():
+    return render_template('new-conference.html')
+
+@app.route('/view-conferences', methods=['GET'])
+def view_conferences():
+    # get list of all conferences
+    # (id, zoom_link, title, desc, start, end, docID)
+    conferences = [(1, 'https://us02web.zoom.us/j/2289', 'title', 'desc', 'timestamp_start', 'timestamp_end', 1), (2, 'https://us02web.zoom.us/j/8193', 'title2', 'desc2', 'timestamp_start', 'timestamp_end', 1)]
+    length = len(conferences)
+    for i in range(length):
+        conferences[i] = list(conferences[i])
+        conferences[i][6] = get_doc_name(conferences[i][6])
+
+    return render_template('view-conferences.html', length = len(conferences), conferences = conferences)
+
+@app.route('/submit-conference', methods=['POST'])
+def submit_conference():
+    docID = request.cookies.get('docID')
+    # put stuff in the DB - confID, title, description, date, starttime, duration, docID
+    return redirect(url_for('view_conferences'))
 
 @app.route('/share-symptoms', methods=['POST'])
 def send_mail():

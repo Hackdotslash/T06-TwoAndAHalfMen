@@ -6,12 +6,14 @@ import hmac
 import base64
 import json
 import sqlite3
+from flask_cors import CORS, cross_origin
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=True)
+cors = CORS(app)
 # con = sqlite3.connect('newdb.db')
 app.config.from_object(settings)
 port = 5000
@@ -50,6 +52,22 @@ def nearby():
 @app.route('/', methods=['GET'])
 def root():
     return render_template('index.html')
+
+@app.route('/doctor', methods=['GET', 'POST'])
+def doctor_reg():
+    if request.method == 'GET':
+        return render_template('doctor-reg.html')
+    else:
+        # form ke values ko DB me daalo
+        # get ID of that doctor, next form me needed!
+        id = 1
+        return render_template('doctor-reg-2.html', docID = id)
+
+
+@app.route('/docRegLocation', methods=['POST'])
+def doc_reg_location():
+    # ID, lat, lng aaega, push it to DB for given ID
+    return render_template('doc_home.html')
 
 @app.route('/diagnosis', methods=['GET'])
 def diagnosis():

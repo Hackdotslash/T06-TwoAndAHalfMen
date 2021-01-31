@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center mt-3">Register as a healthcare provider with our NGO</h1>
+
+    <p class="mt-5">
+        If you are a doctor registered with any medical council in India, and are passionate about providing effective healthcare to rural patients at a reasonable cost, then please register yourself here.
+    </p>
+
+    <form name="docReg" class="mt-5" method="POST" action="/doctor">
+        <div class="form-group mx-auto">
+            <label for="name">Name:</label>
+            <br />
+            <input type="text" name="name" />
+        </div>
+        <div class="form-group mx-auto">
+            <label for="email">Email ID:</label>
+            <br />
+            <input type="text" name="email" />
+        </div>
+        <div class="form-group mx-auto">
+            <label for="number">Phone number:</label>
+            <br />
+            <input type="text" name="number" />
+        </div>
+        <div class="form-group mx-auto">
+            <label for="council">Medical Council:</label>
+            <em>You must be registered with at least one medical council in India</em>
+            <br />
+            <select name="council">
+                <option>Medical Council of India</option>
+                <option>Maharashtra Medical Council</option>
+                <option>Rajasthan Medical Council</option>
+            </select>
+        </div>
+        <div class="form-group mx-auto">
+            <label for="reg_no">Registration Number:</label>
+            <em>Please enter your registration number with respect to the council selected above</em>
+            <br />
+            <input type="text" name="reg_no" />
+        </div>
+        <div class="text-center mb-3">
+            <button type="button" class="btn btn-dark" onclick="validateDocRegForm()">Next</button>
+        </div>
+    </form>
+</div>
+
+<script src="{{ url_for('static',filename='js/index.js') }}"></script>
+
+{% endblock %}

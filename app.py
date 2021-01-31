@@ -67,15 +67,44 @@ def doctor_reg():
         return render_template('doctor-reg.html')
     else:
         # form ke values ko DB me daalo
-        # get ID of that doctor, next form me needed!
+        con = sqlite3.connect('newdb.db')
+        name = request.form['name']
+        phone = request.form['number']
+        email = request.form['email']
+        reg_no = request.form['reg_no']
+        council = request.form['council']
+        query = f"""
+        insert into doctor values (NULL, "{name}", "{phone}", "{email}", "{reg_no}", "{council}", NULL, NULL, '')
+        """
+        print(query)
+        with con:
+            data = con.execute(query)
+        query = f"""
+        SELECT * FROM doctor ORDER BY ID DESC LIMIT 1
+        """
+        print(query)
+        with con:
+            data = con.execute(query)
         id = 1
+        for row in data:
+            id = row[0]
+        # get ID of that doctor, next form me needed!
         return render_template('doctor-reg-2.html', docID = id)
 
 @app.route('/docRegLocation', methods=['POST'])
 def doc_reg_location():
     # ID, lat, lng aaega, push it to DB for given ID
+    con = sqlite3.connect('newdb.db')
     id = request.form['id']
-
+    lat = request.form['lat']
+    lng = request.form['lng']
+    query = f"""
+    update doctor set latitude="{lat}", longitude="{lng}" where id="{id}"
+    """
+    print(query)
+    with con:
+        data = con.execute(query)
+    
     response = make_response(redirect(url_for('doc_home')))
     response.set_cookie('docID', id, max_age=60*60*24*365)
     return response

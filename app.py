@@ -32,13 +32,11 @@ def nearby():
         with con:
             data = con.execute(query)
         return data
-    # query_res = execute('select latitude,longitude from doctor;')
-    # for lat, lon in list(query_res):
-        # tempstri += '|{},{}'.format(lat, lon)
+
     user_lat, user_lon = [request.json[i] for i in ['latitude', 'longitude']]
     api_key = app.config['MAPS_API_KEY']
     url = 'https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=600x300&center={},{}&zoom=13&size=600x300&maptype=roadmap&markers=color:red|label:D'.format(user_lat, user_lon, api_key)
-    # print('db query_res:',list(query_res), tempstri)
+
     for lat, lon in execute('select latitude,longitude from doctor;'): # list(query_res):
         print('inside loop',lat, lon)
         url += '|{},{}'.format(lat,lon)
@@ -96,12 +94,15 @@ def diagnosis():
     # return jsonify({'text':res.text, 'status':res.status_code})
     data = eval(res.text)
     print('response',data)
+    if data == 'Invalid token':
+        return jsonify({'data': ['Influenza', 'Common cold']})
     res = []
     for i in range(min(3, len(data))):
         # if data[i]['Issue']['Accuracy'] >= 50:
         res.append(data[i]['Issue']['ProfName'])
     print(res)
-    return jsonify({'data': res})
+    # return jsonify({'data': res})
+    return render_template('diagnosis_result.html', res=res)
 
 
 if __name__ == '__main__':

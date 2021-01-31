@@ -94,11 +94,21 @@ def logout_doc():
 def new_blog():
     return render_template('new-blog.html')
 
+def get_doc_name(docID):
+    # fix this
+    return 'docName'
+
 @app.route('/view-blogs', methods=['GET'])
 def view_blogs():
     # get list of all blogs
-    blogs = [(1, 'blogTitle', 'dr. GB', 'timestamp', 'blogContent'), (2, 'blogTitle2', 'dr. KD', 'timestamp', 'blogContent')]
-    return render_template('view-blogs.html', length = len(blogs), blogs = blogs)
+    # (blog_id, title, author_id, published_at, content)
+    blogs = [(1, 'blogTitle', 1, 'timestamp', 'blogContent'), (2, 'blogTitle2', 1, 'timestamp', 'blogContent')]
+    length = len(blogs)
+    for i in range(length):
+        blogs[i] = list(blogs[i])
+        blogs[i][2] = get_doc_name(blogs[i][2])
+
+    return render_template('view-blogs.html', length = length, blogs = blogs)
 
 @app.route('/view-blog/<id>')
 def view_blog(id):
@@ -116,6 +126,28 @@ def submit_blog():
     # get ID
     blogID = 1
     return redirect(url_for('view_blog', id=blogID))
+
+@app.route('/new-conference', methods=['GET'])
+def new_conference():
+    return render_template('new-conference.html')
+
+@app.route('/view-conferences', methods=['GET'])
+def view_conferences():
+    # get list of all conferences
+    # (id, zoom_link, title, desc, start, end, docID)
+    conferences = [(1, 'https://us02web.zoom.us/j/2289', 'title', 'desc', 'timestamp_start', 'timestamp_end', 1), (2, 'https://us02web.zoom.us/j/8193', 'title2', 'desc2', 'timestamp_start', 'timestamp_end', 1)]
+    length = len(conferences)
+    for i in range(length):
+        conferences[i] = list(conferences[i])
+        conferences[i][6] = get_doc_name(conferences[i][6])
+
+    return render_template('view-conferences.html', length = len(conferences), conferences = conferences)
+
+@app.route('/submit-conference', methods=['POST'])
+def submit_conference():
+    docID = request.cookies.get('docID')
+    # put stuff in the DB - confID, title, description, date, starttime, duration, docID
+    return redirect(url_for('view_conferences'))
 
 @app.route('/diagnosis', methods=['GET'])
 def diagnosis():

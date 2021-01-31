@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center mt-3">Upcoming Awareness Conferences</h1>
+
+    <p class="mt-5">
+    </p>
+
+    {% for i in range(0, length) %} 
+    <div class="card my-3">
+        <div class="card-body row">
+            <div class="col">
+                <div class="card-title">
+                    <h2 class="d-inline">{{ conferences[i][2] }}</h2>
+                    <h5 class="d-inline text-secondary">by {{ conferences[i][6] }}</h5>
+                </div>
+                <p class="card-text">
+                    {{ conferences[i][3] }}
+                </p>
+            </div>
+            <div class="col-2">
+                <a href="{{ conferences[i][1] }}" class="btn btn-primary">Join Conference</a>
+                <br />
+                <br />
+                <button class="btn btn-primary">
+                    Share
+                </button>            
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<script src="{{ url_for('static',filename='js/index.js') }}"></script>
+
+{% endblock %}

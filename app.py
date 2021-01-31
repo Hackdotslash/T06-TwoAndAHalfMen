@@ -61,6 +61,12 @@ def nearby():
     for doc in execute('select * from doctor;'): # list(query_res):
         print('inside loop',doc)
         lat, lon = doc[6], doc[7]
+        rev_geo_url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng={},{}&key={}'.format(lat,lon,api_key)
+        temp_res = requests.get(rev_geo_url).json()
+        address = temp_res['results'][0]['formatted_address']
+        doc = list(doc)
+        doc.append(address)
+        doc = tuple(doc)
         docs.append(doc)
         url += '|{},{}'.format(lat,lon)
     url += '&markers=color:blue|label:I|{},{}'.format(user_lat, user_lon)
@@ -123,7 +129,7 @@ def doc_reg_location():
     print(query)
     with con:
         data = con.execute(query)
-    
+
     response = make_response(redirect(url_for('doc_home')))
     response.set_cookie('docID', id, max_age=60*60*24*365)
     return response

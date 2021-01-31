@@ -30,6 +30,7 @@
                     <th class="tg-0lax">Name</th>
                     <th class="tg-0lax">Email</th>
                     <th class="tg-0lax">Phone number</th>
+                    <th class="tg-0lax">Address</th>
                     <th class="tg-0lax">Share symptoms with that doctor!</th>
                 </tr>
             </thead>
@@ -39,6 +40,7 @@
                     <td class="tg-0lax">{{ doc[1] }}</td>
                     <td class="tg-0lax">{{ doc[3] }}</td>
                     <td class="tg-0lax">{{ doc[2] }}</td>
+                    <td class="tg-0lax" id="address">{{ doc[9] }}</td>
                     <td class="tg-0lax"><button class="btn btn-primary share-symptoms" id="{{ doc[0] }}"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-share" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#FFF" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <circle cx="6" cy="12" r="3" />
@@ -55,7 +57,9 @@
 {% else %}
     <div id="map"></div>
 {% endif %}
+<script type="text/javascript">
 
+</script>
 <!-- <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_GTGGge8SF-TlI8A15JsVescUBu1jexw&libraries=places"
         async defer></script>

@@ -17,3 +17,13 @@
   float: right;
   color: #00aaff;
 }
+
+textarea {
+  outline: none;
+  resize: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  width: 100%;
+}

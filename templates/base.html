@@ -33,13 +33,50 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/view-blogs">View Blogs</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="nearby-docs">
                     <a class="nav-link" href="/nearby">View Nearby Doctors</a>
                 </li>
             </ul>
             <!-- profile button -->
         </div>
     </div>
+    <div class="container flex-row-reverse">
+        <a class="btn btn-outline-light" id="logoutBtn" href="/logout" role="button">Logout</a>
+    </div>
+    <script type="text/javascript">
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            console.log(decodedCookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        }
+
+        const logoutBtn = document.getElementById('logoutBtn')
+        const docLink = document.getElementById('nearby-docs')
+        
+        if (!getCookie("docID")) {
+            logoutBtn.classList.add('d-none')
+            logoutBtn.classList.remove('d-inline-block')
+            docLink.classList.add('d-block')
+            docLink.classList.remove('d-none')
+        } else {
+            logoutBtn.classList.remove('d-none')
+            logoutBtn.classList.add('d-inline-block')
+            docLink.classList.remove('d-block')
+            docLink.classList.add('d-none')
+        }
+    </script>
 </nav>
 
 

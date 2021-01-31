@@ -3,6 +3,8 @@ function initMap() {
     navigator.geolocation.getCurrentPosition(async (pos) => {
         let latitude = pos.coords.latitude
         let longitude = pos.coords.longitude
+        document.getElementById("latInput").value = latitude
+        document.getElementById("lngInput").value = longitude
 
         var map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: latitude, lng: longitude },

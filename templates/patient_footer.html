@@ -1,26 +1,12 @@
-{% extends 'base.html' %}
-
-{% block title %} Nearby doctors {% endblock %}
-
-{% block css %}
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
-{% endblock %}
-
-{% block body %}
-
-<div class="container">
-    <h1 class="text-center mt-3">Diagnosis Result</h1>
-
-    <p class="mt-5">
-        Based on your symptoms, the possible diagnosis is as follows:
-        <ul>
-            {% for item in res %}
-                <li>{{ item }}</li>
-            {% endfor %}
-        </ul>
-    </p>
-
-</div>
-
-{% include 'patient_footer.html' %}
-{% endblock %}
+<footer class="footer">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-3">
+                <a class="btn btn-primary" href="/offline" role="button">Check out our offline facilites</a>
+            </div>
+            <div class="col-sm-3">
+                <a class="btn btn-primary" href="/doctor" role="button">Are you a doctor?</a>
+            </div>
+        </div>
+    </div>
+</footer>

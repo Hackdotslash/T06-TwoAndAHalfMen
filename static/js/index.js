@@ -19,7 +19,9 @@ locateBtn.addEventListener('click', async (e) => {
             body: JSON.stringify(payload)
         })
         res = await res.text()
-        map.innerHTML = `<img src="data:image/png;base64,${res}"/>`
+        // map.innerHTML = `<img src="data:image/png;base64,${res}"/>`
+        console.log(res)
+        document.getElementsByTagName('html')[0].innerHTML = res
         console.log('done')
     })
 })

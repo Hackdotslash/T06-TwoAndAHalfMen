@@ -13,7 +13,7 @@
   margin-top: 50px;
 }
 
-.form-group em {
+form[name="docReg"] .form-group em {
   float: right;
   color: #00aaff;
 }
@@ -24,6 +24,9 @@ textarea {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-
   width: 100%;
+}
+
+#duration-select {
+  width: 50px;
 }

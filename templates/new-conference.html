@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center mt-3">Host a New Conference</h1>
+
+    <p class="mt-5">
+        This space is created to host awareness sessions virtually, especially for the people who are often not aware of the signs they should look for to diagnose lethal diseases in the early stages. You can schedule a new conference here. Everyone registered with the application will be invited to participate in this conference. The conference will be hosted on Zoom so that the attendees have an option to join in via call, in case they do not have access to internet.
+    </p>
+
+    <form method="POST" class="mt-5" action="/submit-conference">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <br />
+            <input type="text" name="title" />
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <br />
+            <textarea name="description" rows="5"></textarea>
+        </div>
+        <div class="row">
+            <div class="form-group col-3">
+                <label for="date">Date:</label>
+                <br />
+                <input type="date" name="date">
+            </div>
+            <div class="form-group col-6">
+                <label for="start-time">Start-Time:</label>
+                <br />
+                <input type="time" name="start-time" min="10:00" max="18:00">
+                <em>The session must start between 10AM and 6PM</em>
+            </div>
+            <div class="form-group col-3">
+                <label for="duration">Duration:</label>
+                <br />
+                <select id="duration-select" name="duration">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+                <label>hrs</label>
+            </div>
+        </div>
+        <script>
+            var today = new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            console.log(today);
+            document.getElementsByName("date")[0].setAttribute('min', today);
+        </script>
+
+        <button class="btn btn-dark mb-3">Host</button>
+    </form>
+
+</div>
+
+{% endblock %}

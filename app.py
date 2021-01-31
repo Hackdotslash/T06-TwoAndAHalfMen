@@ -113,11 +113,21 @@ def logout_doc():
 def new_blog():
     return render_template('new-blog.html')
 
+def get_doc_name(docID):
+    # fix this
+    return 'docName'
+
 @app.route('/view-blogs', methods=['GET'])
 def view_blogs():
     # get list of all blogs
-    blogs = [(1, 'blogTitle', 'dr. GB', 'timestamp', 'blogContent'), (2, 'blogTitle2', 'dr. KD', 'timestamp', 'blogContent')]
-    return render_template('view-blogs.html', length = len(blogs), blogs = blogs)
+    # (blog_id, title, author_id, published_at, content)
+    blogs = [(1, 'blogTitle', 1, 'timestamp', 'blogContent'), (2, 'blogTitle2', 1, 'timestamp', 'blogContent')]
+    length = len(blogs)
+    for i in range(length):
+        blogs[i] = list(blogs[i])
+        blogs[i][2] = get_doc_name(blogs[i][2])
+
+    return render_template('view-blogs.html', length = length, blogs = blogs)
 
 @app.route('/view-blog/<id>')
 def view_blog(id):

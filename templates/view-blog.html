@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="text-center mt-3">
+        <h1 class="d-inline">{{title}} </h1>
+        <h3 class="d-inline">by {{author}}</h3>    
+    </div>
+
+    <p class="my-5">
+        {{content}}
+    </p>
+
+    <button class="btn btn-primary">
+        Share
+    </button>
+
+</div>
+
+<script src="{{ url_for('static',filename='js/index.js') }}"></script>
+
+{% endblock %}

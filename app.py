@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for, make_response
 import settings
 import requests
 import hmac
@@ -32,11 +32,13 @@ def nearby():
         with con:
             data = con.execute(query)
         return data
-
+    # query_res = execute('select latitude,longitude from doctor;')
+    # for lat, lon in list(query_res):
+        # tempstri += '|{},{}'.format(lat, lon)
     user_lat, user_lon = [request.json[i] for i in ['latitude', 'longitude']]
     api_key = app.config['MAPS_API_KEY']
     url = 'https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=600x300&center={},{}&zoom=13&size=600x300&maptype=roadmap&markers=color:red|label:D'.format(user_lat, user_lon, api_key)
-
+    # print('db query_res:',list(query_res), tempstri)
     for lat, lon in execute('select latitude,longitude from doctor;'): # list(query_res):
         print('inside loop',lat, lon)
         url += '|{},{}'.format(lat,lon)
@@ -49,10 +51,15 @@ def nearby():
 
 @app.route('/', methods=['GET'])
 def root():
+    if request.cookies.get('docID'):
+        return redirect(url_for('doc_home'))
     return render_template('index.html')
 
 @app.route('/doctor', methods=['GET', 'POST'])
 def doctor_reg():
+    if request.cookies.get('docID'):
+        return redirect(url_for('root'))
+
     if request.method == 'GET':
         return render_template('doctor-reg.html')
     else:
@@ -61,11 +68,51 @@ def doctor_reg():
         id = 1
         return render_template('doctor-reg-2.html', docID = id)
 
-
 @app.route('/docRegLocation', methods=['POST'])
 def doc_reg_location():
     # ID, lat, lng aaega, push it to DB for given ID
+    id = request.form['id']
+
+    response = make_response(redirect(url_for('doc_home')))
+    response.set_cookie('docID', id, max_age=60*60*24*365)
+    return response
+
+@app.route('/docHome', methods=['GET'])
+def doc_home():
     return render_template('doc_home.html')
+
+@app.route('/logout', methods=['GET'])
+def logout_doc():
+    response = make_response(redirect(url_for('root')))
+    response.set_cookie('docID', '3435', max_age=0)
+    return response
+
+@app.route('/new-blog', methods=['GET'])
+def new_blog():
+    return render_template('new-blog.html')
+
+@app.route('/view-blogs', methods=['GET'])
+def view_blogs():
+    # get list of all blogs
+    blogs = [(1, 'blogTitle', 'dr. GB', 'timestamp', 'blogContent'), (2, 'blogTitle2', 'dr. KD', 'timestamp', 'blogContent')]
+    return render_template('view-blogs.html', length = len(blogs), blogs = blogs)
+
+@app.route('/view-blog/<id>')
+def view_blog(id):
+    # get stuff from blog table
+    # get doc name from doc table using docID recvd from blog table
+    doc_name = "dr. GB"
+    title = "title"
+    content = "content"
+    return render_template('view-blog.html', title = title, content = content, author = doc_name)
+
+@app.route('/submit-blog', methods=['POST'])
+def submit_blog():
+    docID = request.cookies.get('docID')
+    # put stuff in the DB - blogID, title, content, docID
+    # get ID
+    blogID = 1
+    return redirect(url_for('view_blog', id=blogID))
 
 @app.route('/diagnosis', methods=['GET'])
 def diagnosis():
@@ -94,15 +141,12 @@ def diagnosis():
     # return jsonify({'text':res.text, 'status':res.status_code})
     data = eval(res.text)
     print('response',data)
-    if data == 'Invalid token':
-        return jsonify({'data': ['Influenza', 'Common cold']})
     res = []
     for i in range(min(3, len(data))):
         # if data[i]['Issue']['Accuracy'] >= 50:
         res.append(data[i]['Issue']['ProfName'])
     print(res)
-    # return jsonify({'data': res})
-    return render_template('diagnosis_result.html', res=res)
+    return jsonify({'data': res})
 
 
 if __name__ == '__main__':

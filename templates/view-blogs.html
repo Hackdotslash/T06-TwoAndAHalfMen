@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center mt-3">Useful Healthcare Blogs</h1>
+
+    <p class="mt-5">
+        If you are a doctor registered with any medical council in India, and are passionate about providing effective healthcare to rural patients at a reasonable cost, then please register yourself here.
+    </p>
+
+    {% for i in range(0, length) %} 
+    <div class="card my-3">
+        <div class="card-body row">
+            <div class="col card-title">
+                <h2 class="d-inline">{{ blogs[i][1] }}</h2>
+                <h5 class="d-inline text-secondary">by {{ blogs[i][2] }}</h5>
+            </div>
+            <div class="col-2">
+                <a href="/view-blog/{{ blogs[i][0] }}" class="btn btn-primary">Read Blog</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<script src="{{ url_for('static',filename='js/index.js') }}"></script>
+
+{% endblock %}

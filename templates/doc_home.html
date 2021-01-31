@@ -8,7 +8,29 @@
 
 {% block body %}
 
-<div class="container">
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row my-5 justify-content-center">
+                <a class="btn btn-info p-3" href="/new-blog" role="button">Write a Blog</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row my-5 justify-content-center">
+                <a class="btn btn-info p-3" href="/new-conference" role="button">Host an informative conference</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row my-5 justify-content-center">
+                <a class="btn btn-info p-3" href="/view-blogs" role="button">View all Blogs</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row my-5 justify-content-center">
+                <a class="btn btn-info p-3" href="/view-conferences" role="button">View all conferences</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="{{ url_for('static',filename='js/index.js') }}"></script>

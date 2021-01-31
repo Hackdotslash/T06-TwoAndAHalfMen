@@ -10,8 +10,9 @@
 
 <div class="text-center container">
     <h1 class="mt-3">Select the location of your clinic below</h1>
-
-    <div id="map" style="width: 500px; height: 400px;"></div>
+    <div class="row align-items-center">
+        <div id="map" class="col my-3" style="width: 500px; height: 400px;"></div>
+    </div>
 
     <form name="docRegLocation" class="d-none" method="POST" action="/docRegLocation">
         <input type="text" name="id" value="{{docID}}" />

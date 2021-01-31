@@ -3,3 +3,4 @@ gunicorn==19.9.0
 Jinja2==2.10.1
 python-dotenv==0.10.1
 requests==2.21.0
+flask_cors

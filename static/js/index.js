@@ -1,5 +1,26 @@
 // console.log(google)
 
+async function sendMail(e, id) {
+    console.log('id', id);
+    let payload = {
+        doctorId: id
+    }
+    let res = await fetch('/share-symptoms', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    res = await res.json()
+    if(res.status){
+        alert('Mail sent!')
+    }
+    else{
+        alert('Some issue occured!')
+    }
+}
+
 window.onload = () => {
     const locateBtn = document.getElementById('locateBtn')
     const map = document.getElementById('map')
@@ -23,11 +44,17 @@ window.onload = () => {
                 res = await res.text()
                 // map.innerHTML = `<img src="data:image/png;base64,${res}"/>`
                 document.getElementsByTagName('html')[0].innerHTML = res
+                const shareBtns = document.getElementsByClassName('share-symptoms')
+                console.log(shareBtns.length, 'haha');
+                for(let i=0; i<shareBtns.length; i++){
+                    shareBtns[i].addEventListener('click', (e) => sendMail(e, i+1));
+                }
                 console.log('done')
             })
         })
     }
 }
+
 
 function validateDocRegForm() {
     const form = document.getElementsByName("docReg")[0]

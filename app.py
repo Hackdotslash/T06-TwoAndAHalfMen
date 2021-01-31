@@ -39,7 +39,7 @@ def nearby():
     docs = []
     for doc in execute('select * from doctor;'): # list(query_res):
         print('inside loop',doc)
-        lat, lon = doc[5], doc[6]
+        lat, lon = doc[6], doc[7]
         docs.append(doc)
         url += '|{},{}'.format(lat,lon)
     url += '&markers=color:blue|label:I|{},{}'.format(user_lat, user_lon)

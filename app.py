@@ -6,6 +6,8 @@ import hmac
 import base64
 import json
 import sqlite3
+import time
+import datetime
 from flask_cors import CORS, cross_origin
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -143,14 +145,32 @@ def new_blog():
     return render_template('new-blog.html')
 
 def get_doc_name(docID):
-    # fix this
-    return 'docName'
+    con = sqlite3.connect('newdb.db')
+    query = f"""
+    SELECT name FROM doctor where id={int(docID)}
+    """
+    print(query)
+    with con:
+        data = con.execute(query)
+    for row in data:
+        return row[0]
 
 @app.route('/view-blogs', methods=['GET'])
 def view_blogs():
     # get list of all blogs
     # (blog_id, title, author_id, published_at, content)
-    blogs = [(1, 'blogTitle', 1, 'timestamp', 'blogContent'), (2, 'blogTitle2', 1, 'timestamp', 'blogContent')]
+    blogs = []
+    con = sqlite3.connect('newdb.db')
+    query = f"""
+    SELECT * FROM blogpost
+    """
+    print(query)
+    with con:
+        data = con.execute(query)
+    for row in data:
+        blogs.append(row)
+
+    print(blogs)
     length = len(blogs)
     for i in range(length):
         blogs[i] = list(blogs[i])
@@ -161,18 +181,46 @@ def view_blogs():
 @app.route('/view-blog/<id>')
 def view_blog(id):
     # get stuff from blog table
+    con = sqlite3.connect('newdb.db')
+    query = f"""
+    SELECT * FROM blogpost where blog_id={int(id)}
+    """
+    print(query)
+    blog = []
+    with con:
+        data = con.execute(query)
+    for row in data:
+        blog = tuple(row)
     # get doc name from doc table using docID recvd from blog table
     doc_name = "dr. GB"
-    title = "title"
-    content = "content"
+    title = blog[1]
+    content = blog[4]
     return render_template('view-blog.html', title = title, content = content, author = doc_name)
 
 @app.route('/submit-blog', methods=['POST'])
 def submit_blog():
     docID = request.cookies.get('docID')
     # put stuff in the DB - blogID, title, content, docID
-    # get ID
+    con = sqlite3.connect('newdb.db')
+    title = request.form['title']
+    content = request.form['content']
+    ts = time.time()
+    timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    query = f"""
+    insert into blogpost values (NULL, "{title}", "{docID}", "{timestamp}", "{content}")
+    """
+    print(query)
+    with con:
+        data = con.execute(query)
+    query = f"""
+    SELECT * FROM blogpost ORDER BY ID DESC LIMIT 1
+    """
+    print(query)
+    with con:
+        data = con.execute(query)
     blogID = 1
+    for row in data:
+        blogID = row[0]    # get ID
     return redirect(url_for('view_blog', id=blogID))
 
 @app.route('/share-symptoms', methods=['POST'])

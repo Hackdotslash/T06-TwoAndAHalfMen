@@ -10,6 +10,25 @@ from flask_cors import CORS, cross_origin
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
+def send_email(sender_email_id, sender_email_id_password, receiver_email_id, message):
+    # Python code to illustrate Sending mail from
+    # your Gmail account
+    import smtplib, ssl
+
+    # creates SMTP session
+    # s = smtplib.SMTP('smtp.gmail.com', 587)
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as s:
+        # start TLS for security
+        # s.starttls()
+
+        # Authentication
+        s.login(sender_email_id, sender_email_id_password)
+        # sending the mail
+        s.sendmail(sender_email_id, receiver_email_id, message)
+
+    # terminating the session
+    # s.quit()
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=True)
@@ -117,6 +136,29 @@ def submit_blog():
     blogID = 1
     return redirect(url_for('view_blog', id=blogID))
 
+@app.route('/share-symptoms', methods=['POST'])
+def send_mail():
+    age = request.cookies.get('age')
+    gender = request.cookies.get('gender')
+    symptoms = request.cookies.get('symptoms')
+    con = sqlite3.connect('newdb.db')
+    def execute(query):
+        with con:
+            data = con.execute(query)
+        return data
+    print(request.json)
+    doc_email = list(execute('select email from doctor where id={}'.format(request.json['doctorId'])))[0][0]
+    message = """
+        Hi, patient has shared symptoms with you
+        Age: {}
+        Gender: {}
+        Symptoms: {}
+    """.format(age, gender, symptoms)
+    print(message)
+    send_email("bonvoyage6566@gmail.com", "1711065and66", doc_email, message)
+    return jsonify({'status': True});
+
+
 @app.route('/diagnosis', methods=['GET'])
 def diagnosis():
     url = 'https://sandbox-healthservice.priaid.ch/diagnosis'
@@ -149,7 +191,12 @@ def diagnosis():
         # if data[i]['Issue']['Accuracy'] >= 50:
         res.append(data[i]['Issue']['ProfName'])
     print(res)
-    return jsonify({'data': res})
+    # return jsonify({'data': res})
+    response = make_response(render_template('diagnosis_result.html', res=res))
+    response.set_cookie('gender', str(args['gender'][0]), max_age=60*60*24*365)
+    response.set_cookie('age', str(args['age'][0]), max_age=60*60*24*365)
+    response.set_cookie('symptoms', str(res), max_age=60*60*24*365)
+    return response
 
 
 if __name__ == '__main__':

@@ -1,13 +1,24 @@
 // console.log(google)
 
 async function sendMail(e, id) {
+    console.log('id', id);
     let payload = {
         doctorId: id
     }
     let res = await fetch('/share-symptoms', {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(payload)
     })
+    res = await res.json()
+    if(res.status){
+        alert('Mail sent!')
+    }
+    else{
+        alert('Some issue occured!')
+    }
 }
 
 window.onload = () => {
